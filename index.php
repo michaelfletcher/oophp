@@ -10,17 +10,21 @@
 //
 //$instance = new Files();
 //echo '<br>' . $instance->GetNumChecked() . '<br>';
-
-
-require_once('ParentClass.php');
-require_once('ChildClass.php');
-
+//require_once('ParentClass.php');
+//require_once('ChildClass.php');
 //$parentObject = new ParentClass();
 //$result = $parentObject->DoSomething();
 //echo $result;
-$childObject = new ChildClass();
-$r = $childObject->DoSomething();
-echo '$r: ' . $r . '<hr>';
+//$childObject = new ChildClass();
+//$r = $childObject->DoSomething();
+//echo '$r: ' . $r . '<hr>';
+//include('MySqlDb_old.php');
+//$conn = Connect();
+//$rows = get($conn);
+
+include('MySqlDb.php');
+$db = new MySqlDb('localhost', 'root', '110110', 'test');
+$rows = $db->Query('select * from posts');
 ?>
 <!doctype html>
 <html>
@@ -29,6 +33,13 @@ echo '$r: ' . $r . '<hr>';
         <title>OOPHP</title>
     </head>
     <body>
+        <?php
+        foreach ($rows as $row) {
+            echo '<h2>' . $row['title'] . '</h2>';
+            echo '<p>' . $row['body'] . '</p>';
+        }
 
+        //        echo '<pre>'; print_r($rows); echo '</pre>';
+        ?>
     </body>
 </html>
