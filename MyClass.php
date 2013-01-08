@@ -6,6 +6,9 @@ class MyClass {
         echo "It's up and running!";
     }
 
+    public function DoSomething() {
+        echo 'Doing something from MyClass.<br>';
+    }
 }
 
 ?>
