@@ -7,7 +7,7 @@ class MyClass {
     }
 
     public function DoSomething() {
-        echo 'Doing something from MyClass.<br>';
+        echo 'NEWWWWW  ....  Doing something from MyClass.<br>';
     }
 }
 
