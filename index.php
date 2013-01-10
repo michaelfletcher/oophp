@@ -39,7 +39,8 @@ $rows = $db->Query('select * from posts');
             echo '<p>' . $row['body'] . '</p>';
         }
 
-        //        echo '<pre>'; print_r($rows); echo '</pre>';
+//                echo '<pre>'; print_r($rows); echo '</pre>';
+
         ?>
     </body>
 </html>
