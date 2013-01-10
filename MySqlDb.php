@@ -19,50 +19,47 @@ class MySqlDb {
         $this->_mysql = new mysqli($host, $username, $password, $db)
                 or die('Problem in connecting to the DB.');
     }
-    
+
+    /**
+     * Executes a query.
+     * 
+     * @param string $query Contains a user-provided select query.
+     */
     public function Query($query) {
         $this->_query = filter_var($query, FILTER_SANITIZE_STRING);
-        
+
         $stmt = $this->_PrepareQuery();
         $stmt->execute();
         $results = $this->_DynamicBindResults($stmt);
         return $results;
     }
-    
+
     function Get($tableName, $numRows = NULL) {
         
     }
-    
+
     function Insert($tableName, $insertData) {
         
     }
-    
+
     function Update($tableName, $updateData) {
         
     }
-    
+
     function Delete($tableName) {
         
     }
-    
+
     function Where($whereProp, $whereValue) {
         
     }
 
-        /**
-     * Executes a query.
-     * 
-     * @param string $query Contains a user-provided select query.
-     */
-//    public function Query($query) {
-//        $this->_query = filter_var($query, FILTER_SANITIZE_STRING);
-//        
-//        $stmt = $this->_mysql->prepare($this->_query);
-//        $stmt->execute();
-//        
-//        $results = $this->_dynamicBindResults($stmt);
-//        return $results;
-//    }
+    protected function _PrepareQuery() {
+        if (!$stmt = $this->_mysql->prepare($this->_query)) {
+            trigger_error('Problem preparing query', E_USER_ERROR);
+        }
+        return $stmt;
+    }
 
     /**
      * This helper method takes care of prepared statements' "bind_result"
@@ -71,50 +68,22 @@ class MySqlDb {
      * @param object $stmt Equal to the prepared statement object.
      * @return array The results of the SQL fetch.
      */
-//    protected function _dynamicBindResults($stmt) {
-//        $parameters = array();
-//        $results = array();
-//        
-//        $meta = $stmt->result_metadata();
-//        while ($field = $meta->fetch_field()) {
-//            $parameters[] = &$row[$field->name];
-//        }
-//        
-//        call_user_func_array(array($stmt, 'bind_result'), $parameters);
-//        
-//        while ($stmt->fetch()) {
-//            $x = array();
-//            foreach ($row as $key => $val) {
-//                $x[$key] = $val;
-//            }
-//            $results[] = $x;
-//        }
-//        return $results;
-//    }
-    
-    protected function _PrepareQuery() {
-        if ( !$stmt = $this->_mysql->prepare($this->_query)) {
-            trigger_error('Problem preparing query', E_USER_ERROR);
-        }
-        return $stmt;
-    }
-    
     protected function _DynamicBindResults($stmt) {
         $parameters = array();
         $results = array();
         $meta = $stmt->result_metadata();
-        
-        while ( $field = $meta->fetch_field() ) {
+
+        while ($field = $meta->fetch_field()) {
             $parameters[] = &$row[$field->name];
         }
-        
-        call_user_func_array( array($stmt, 'bind_result'),  $parameters );
+
+        call_user_func_array(array($stmt, 'bind_result'), $parameters);
         // array($stmt, 'bind_result') ==> $stmt.bind_result();
-        
-        while ( $stmt->fetch() ) {
+
+        while ($stmt->fetch()) {
             $x = array();
-            
-            foreach ( $row as $key => $val ) {
+
+            foreach ($row as $key => $val) {
                 $x[$key] = $val;
             }
             $results[] = $x;
@@ -125,6 +94,7 @@ class MySqlDb {
     function __destruct() {
         $this->_mysql->close();
     }
+
 }
 
 ?>
